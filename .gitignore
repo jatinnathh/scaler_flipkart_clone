@@ -9,7 +9,13 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+node_modules
+server/node_modules
+.next
+.env
+.env.local
+dist
+build
 # testing
 /coverage
 
