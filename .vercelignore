@@ -1,0 +1,13 @@
+# Ignore server directory - it's deployed on Render, not Vercel
+server/
+.git/
+.gitignore
+
+# Environment files
+.env.local
+.env.*.local
+.env
+
+# Render configuration
+render.yaml
+RENDER_YAML_GUIDE.md
