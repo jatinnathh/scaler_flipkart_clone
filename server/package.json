@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
     "migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
     "db:reset": "tsx scripts/migrate.ts && tsx scripts/seed.ts"
