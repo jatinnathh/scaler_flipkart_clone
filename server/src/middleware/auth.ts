@@ -54,7 +54,7 @@ export async function resolveUser(req: Request, res: Response, next: NextFunctio
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
 
-    let user = await getDbUser(auth.userId);
+    let user: Record<string, any> | null = await getDbUser(auth.userId);
 
     // Auto-sync: if user not in DB yet, fetch from Clerk and create
     if (!user) {
