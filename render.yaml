@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: flipkart-clone-server
+    env: node
+    plan: free
+    root: server
+    buildCommand: npm install && npm run migrate
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        scope: build
+        sync: false
+      - key: CLERK_SECRET_KEY
+        scope: build
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        scope: build
+        sync: false
+      - key: FRONTEND_URL
+        scope: build
+        sync: false
+      - key: EMAIL_USER
+        scope: build
+        sync: false
+      - key: EMAIL_PASSWORD
+        scope: build
+        sync: false
+      - key: EMAIL_FROM
+        scope: build
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        scope: build
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        scope: build
+        sync: false
+      - key: SVIX_WEBHOOK_SECRET
+        scope: build
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+
+jobs:
+  - type: cron
+    name: refresh-product-images
+    schedule: "0 2 * * *"  # Daily at 2 AM UTC
+    startCommand: npm run refresh-product-images
+    envVars:
+      - key: DATABASE_URL
+        scope: run
+        sync: false
