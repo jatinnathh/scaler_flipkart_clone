@@ -1,21 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  webpack: (config, { isServer }) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      path: false,
-      crypto: false,
-    };
-    return config;
-  },
-  // Exclude server directory from build
-  experimental: {
-    outputFileTracingExcludes: {
-      '/**/*': ['./server/**/*'],
-    },
-  },
+  // Use Turbopack (default in Next.js 16)
+  turbopack: {},
 };
 
 export default nextConfig;
