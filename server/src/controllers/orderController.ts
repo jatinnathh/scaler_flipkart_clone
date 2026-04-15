@@ -60,6 +60,8 @@ export async function placeOrder(req: Request, res: Response, next: NextFunction
         shipping_state: fullOrder.shipping_state,
         shipping_pincode: fullOrder.shipping_pincode,
         payment_method: fullOrder.payment_method,
+      }).catch((error: any) => {
+        console.error('Failed to send order confirmation email:', error);
       });
     }
 
