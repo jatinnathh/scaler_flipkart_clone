@@ -48,9 +48,6 @@ export default function ProductCard({
   };
 
   const ratingClass = avg_rating >= 4 ? "high" : avg_rating >= 3 ? "medium" : "low";
-  const deliveryDate = new Date(Date.now() + 3 * 86400000).toLocaleDateString("en-IN", {
-    weekday: "short", month: "short", day: "numeric",
-  });
 
   return (
     <Link href={`/product/${slug}`} className="product-card block no-underline group">
@@ -69,8 +66,8 @@ export default function ProductCard({
 
       {/* Out of stock overlay */}
       {stock_quantity <= 0 && (
-        <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded">
-          <span className="bg-gray-800 text-white px-4 py-2 rounded font-semibold text-sm">
+        <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded-xl">
+          <span className="bg-gray-800 text-white px-4 py-2 rounded-lg font-semibold text-sm">
             Out of Stock
           </span>
         </div>
@@ -89,10 +86,10 @@ export default function ProductCard({
       </div>
 
       {/* Info */}
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {/* Brand */}
         {brand && (
-          <p className="text-xs text-flipkart-text-secondary font-medium uppercase tracking-wide">
+          <p className="text-[11px] text-flipkart-text-secondary font-medium uppercase tracking-wider">
             {brand}
           </p>
         )}
@@ -102,17 +99,19 @@ export default function ProductCard({
           {name}
         </h3>
 
-        {/* Rating */}
-        {avg_rating > 0 && (
-          <div className="flex items-center gap-2">
+        {/* Rating + Price Row */}
+        <div className="flex items-center gap-2">
+          {avg_rating > 0 && (
             <span className={`rating-badge ${ratingClass}`}>
-              {avg_rating.toFixed(1)} <FiStar size={10} fill="white" />
+              {avg_rating.toFixed(1)} <FiStar size={9} fill="white" />
             </span>
-            <span className="text-xs text-flipkart-text-secondary">
+          )}
+          {total_ratings > 0 && (
+            <span className="text-[11px] text-flipkart-text-secondary">
               ({total_ratings.toLocaleString()})
             </span>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Price */}
         <div className="price-block">
@@ -125,14 +124,9 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Delivery */}
-        <p className="text-xs text-flipkart-text-secondary">
-          Free delivery by <span className="font-medium text-flipkart-text">{deliveryDate}</span>
-        </p>
-
         {/* Stock warning */}
         {stock_quantity > 0 && stock_quantity <= 5 && (
-          <p className="stock-warning">Only {stock_quantity} left!</p>
+          <p className="stock-warning text-xs">Only {stock_quantity} left!</p>
         )}
       </div>
     </Link>

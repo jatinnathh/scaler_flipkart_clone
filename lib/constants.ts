@@ -59,24 +59,52 @@ export const ORDER_STATUS_COLORS: Record<string, string> = {
 
 export const BANNER_IMAGES = [
   {
-    url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1400&h=400&fit=crop",
+    url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=400&fit=crop",
     alt: "Big Sale — Up to 80% Off",
+    subtitle: "On Electronics, Fashion & More",
     link: "/search?sortBy=discount",
   },
   {
-    url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&h=400&fit=crop",
+    url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=400&fit=crop",
     alt: "Fashion Mega Sale",
+    subtitle: "Top brands at best prices",
     link: "/category/fashion-men",
   },
   {
-    url: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1400&h=400&fit=crop",
-    alt: "Electronics Store — Best Deals",
+    url: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=800&h=400&fit=crop",
+    alt: "Best of Electronics",
+    subtitle: "Laptops, Phones, Cameras & More",
     link: "/category/electronics",
   },
   {
-    url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1400&h=400&fit=crop",
+    url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop",
     alt: "Home & Kitchen Essentials",
+    subtitle: "Up to 60% Off",
     link: "/category/home-kitchen",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=400&fit=crop",
+    alt: "Beauty & Personal Care",
+    subtitle: "Minimum 30% Off",
+    link: "/category/beauty",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=400&fit=crop",
+    alt: "Books & Stationery",
+    subtitle: "Bestsellers starting ₹99",
+    link: "/category/books",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1461896836934-bd45ba6343b4?w=800&h=400&fit=crop",
+    alt: "Sports & Fitness",
+    subtitle: "Gear up for the season",
+    link: "/category/sports",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=400&fit=crop",
+    alt: "Women's Fashion",
+    subtitle: "New arrivals daily",
+    link: "/category/fashion-women",
   },
 ];
 

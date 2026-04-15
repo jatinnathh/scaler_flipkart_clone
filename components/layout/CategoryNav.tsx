@@ -3,7 +3,24 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { CATEGORY_ICONS } from "@/lib/constants";
 import type { Category } from "@/types";
+import {
+  FiStar, FiMonitor, FiSmartphone, FiShoppingBag,
+  FiHeart, FiHome, FiBook
+} from "react-icons/fi";
+import { MdSportsCricket, MdFace } from "react-icons/md";
+
+const iconMap: Record<string, any> = {
+  electronics: FiMonitor,
+  mobiles: FiSmartphone,
+  "fashion-men": FiShoppingBag,
+  "fashion-women": FiHeart,
+  "home-kitchen": FiHome,
+  books: FiBook,
+  sports: MdSportsCricket,
+  beauty: MdFace,
+};
 
 export default function CategoryNav() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -13,7 +30,6 @@ export default function CategoryNav() {
       .get<{ success: boolean; data: Category[] }>("/categories?flat=true")
       .then((res) => {
         if (res.success) {
-          // Only show top-level categories (parent_id is null)
           setCategories(res.data.filter((c) => !c.parent_id));
         }
       })
@@ -26,30 +42,21 @@ export default function CategoryNav() {
     <div className="category-strip">
       <div className="container-fk">
         <div className="flex">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/category/${cat.slug}`}
-              className="category-item no-underline"
-            >
-              {cat.image_url ? (
-                <img
-                  src={cat.image_url}
-                  alt={cat.name}
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "https://via.placeholder.com/56?text=" + cat.name.charAt(0);
-                  }}
-                />
-              ) : (
-                <div className="w-14 h-14 bg-flipkart-primary-light rounded-full flex items-center justify-center text-flipkart-primary text-xl font-bold">
-                  {cat.name.charAt(0)}
+          {categories.map((cat) => {
+            const Icon = iconMap[cat.slug] || FiStar;
+            return (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="category-item no-underline"
+              >
+                <div className="cat-icon">
+                  <Icon size={24} />
                 </div>
-              )}
-              <span>{cat.name}</span>
-            </Link>
-          ))}
+                <span>{cat.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>

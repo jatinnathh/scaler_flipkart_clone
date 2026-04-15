@@ -17,6 +17,16 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Group Companies */}
+          <div>
+            <h4 className="footer-heading">Group Companies</h4>
+            <ul className="space-y-2">
+              <li><Link href="/">Myntra</Link></li>
+              <li><Link href="/">Cleartrip</Link></li>
+              <li><Link href="/">Shopsy</Link></li>
+            </ul>
+          </div>
+
           {/* Help */}
           <div>
             <h4 className="footer-heading">Help</h4>
@@ -28,44 +38,29 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Policy */}
+          {/* Consumer Policy */}
           <div>
-            <h4 className="footer-heading">Policy</h4>
+            <h4 className="footer-heading">Consumer Policy</h4>
             <ul className="space-y-2">
-              <li><Link href="/">Return Policy</Link></li>
+              <li><Link href="/">Cancellation & Returns</Link></li>
               <li><Link href="/">Terms of Use</Link></li>
               <li><Link href="/">Security</Link></li>
               <li><Link href="/">Privacy</Link></li>
+              <li><Link href="/">Grievance Redressal</Link></li>
             </ul>
-          </div>
-
-          {/* Social */}
-          <div>
-            <h4 className="footer-heading">Mail Us</h4>
-            <p className="text-xs text-gray-500 leading-5">
-              Flipkart Clone,<br />
-              Built as a Scaler Academy Assignment,<br />
-              Bengaluru, Karnataka, India
-            </p>
-            <h4 className="footer-heading mt-4">Registered Office</h4>
-            <p className="text-xs text-gray-500 leading-5">
-              Flipkart Internet Private Limited,<br />
-              Buildings Alyssa, Begonia & Clove Embassy Tech Village,<br />
-              Bengaluru, 560103
-            </p>
           </div>
         </div>
 
-        {/* Bottom */}
+        {/* Bottom Row */}
         <div className="flex flex-col md:flex-row items-center justify-between pt-6 gap-4">
           <div className="flex flex-wrap items-center gap-6 text-xs text-gray-500">
-            <span>💳 Become a Seller</span>
-            <span>⭐ Advertise</span>
-            <span>🎁 Gift Cards</span>
-            <span>❓ Help Center</span>
+            <span>Become a Seller</span>
+            <span>Advertise</span>
+            <span>Gift Cards</span>
+            <span>Help Center</span>
           </div>
           <p className="text-xs text-gray-600">
-            © 2024 Flipkart Clone. Built with ❤️ for Scaler Academy.
+            &copy; {new Date().getFullYear()} Flipkart Clone &mdash; Built for Scaler Academy Assignment
           </p>
         </div>
       </div>
