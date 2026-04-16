@@ -60,7 +60,7 @@ export default function Footer() {
             <span>Help Center</span>
           </div>
           <p className="text-xs text-gray-600">
-            &copy; {new Date().getFullYear()} Flipkart Clone &mdash; Built for Scaler Academy Assignment
+            &copy; {new Date().getFullYear()} Flipkart Clone &mdash;
           </p>
         </div>
       </div>

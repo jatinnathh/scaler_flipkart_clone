@@ -8,6 +8,7 @@
     "start": "tsx src/index.ts",
     "migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
+    "refresh-product-images": "tsx scripts/refresh-product-images.ts",
     "db:reset": "tsx scripts/migrate.ts && tsx scripts/seed.ts"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^6.9.16",
     "razorpay": "^2.9.6",
+    "resend": "^3.0.0",
     "svix": "^1.42.0"
   },
   "devDependencies": {

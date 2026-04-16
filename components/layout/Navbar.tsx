@@ -128,19 +128,19 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="sm:hidden bg-white border-t border-flipkart-border shadow-lg">
+        <div className="sm:hidden fk-surface border-t fk-border shadow-lg">
           {isSignedIn && (
             <>
-              <Link href="/orders" className="block px-4 py-3 text-flipkart-text hover:bg-gray-50 border-b border-gray-100 no-underline" onClick={() => setMenuOpen(false)}>
+              <Link href="/orders" className="block px-4 py-3 fk-text hover:bg-black/5 dark:hover:bg-white/5 border-b fk-border no-underline" onClick={() => setMenuOpen(false)}>
                 <FiPackage className="inline mr-2" /> My Orders
               </Link>
-              <Link href="/wishlist" className="block px-4 py-3 text-flipkart-text hover:bg-gray-50 border-b border-gray-100 no-underline" onClick={() => setMenuOpen(false)}>
+              <Link href="/wishlist" className="block px-4 py-3 fk-text hover:bg-black/5 dark:hover:bg-white/5 border-b fk-border no-underline" onClick={() => setMenuOpen(false)}>
                 <FiHeart className="inline mr-2" /> Wishlist
               </Link>
-              <Link href="/account" className="block px-4 py-3 text-flipkart-text hover:bg-gray-50 border-b border-gray-100 no-underline" onClick={() => setMenuOpen(false)}>
+              <Link href="/account" className="block px-4 py-3 fk-text hover:bg-black/5 dark:hover:bg-white/5 border-b fk-border no-underline" onClick={() => setMenuOpen(false)}>
                 My Account
               </Link>
-              <Link href="/admin/login" className="block px-4 py-3 text-flipkart-text hover:bg-gray-50 no-underline" onClick={() => setMenuOpen(false)}>
+              <Link href="/admin/login" className="block px-4 py-3 fk-text hover:bg-black/5 dark:hover:bg-white/5 no-underline" onClick={() => setMenuOpen(false)}>
                 <FiShield className="inline mr-2" /> Admin Dashboard
               </Link>
             </>

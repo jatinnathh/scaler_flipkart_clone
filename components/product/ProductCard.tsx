@@ -89,13 +89,13 @@ export default function ProductCard({
       <div className="space-y-1">
         {/* Brand */}
         {brand && (
-          <p className="text-[11px] text-flipkart-text-secondary font-medium uppercase tracking-wider">
+          <p className="text-[11px] fk-text-secondary font-medium uppercase tracking-wider">
             {brand}
           </p>
         )}
 
         {/* Name */}
-        <h3 className="text-sm text-flipkart-text font-medium line-clamp-2 leading-snug min-h-[2.5rem]">
+        <h3 className="text-sm fk-text font-medium line-clamp-2 leading-snug min-h-[2.5rem]">
           {name}
         </h3>
 
@@ -107,7 +107,7 @@ export default function ProductCard({
             </span>
           )}
           {total_ratings > 0 && (
-            <span className="text-[11px] text-flipkart-text-secondary">
+            <span className="text-[11px] fk-text-secondary">
               ({total_ratings.toLocaleString()})
             </span>
           )}

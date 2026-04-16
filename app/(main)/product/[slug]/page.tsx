@@ -12,6 +12,26 @@ import { formatPrice, getDiscountLabel, getDeliveryDate } from "@/lib/utils";
 import ProductCard from "@/components/product/ProductCard";
 import { FiStar, FiHeart, FiShare2, FiShoppingCart, FiZap, FiCheck, FiTruck, FiShield, FiRefreshCcw } from "react-icons/fi";
 
+function collectDetailCards(specs: Record<string, Record<string, string>>, highlights: string[]) {
+  const cards: { label: string; value: string }[] = [];
+
+  for (const [section, fields] of Object.entries(specs)) {
+    for (const [key, value] of Object.entries(fields)) {
+      if (!value || cards.length >= 6) continue;
+      cards.push({ label: `${section} · ${key}`, value: String(value) });
+    }
+    if (cards.length >= 6) break;
+  }
+
+  if (cards.length < 6) {
+    highlights.slice(0, 6 - cards.length).forEach((highlight, index) => {
+      cards.push({ label: `Highlight ${index + 1}`, value: highlight });
+    });
+  }
+
+  return cards;
+}
+
 export default function ProductDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -127,6 +147,7 @@ export default function ProductDetailPage() {
   const wishlisted = isWishlisted(product.id);
   const ratingClass = parseFloat(product.avg_rating) >= 4 ? "high" : parseFloat(product.avg_rating) >= 3 ? "medium" : "low";
   const discountPercent = product.discount_percent || 0;
+  const detailCards = collectDetailCards(specs, highlights);
 
   return (
     <div className="container-fk py-4">
@@ -140,7 +161,7 @@ export default function ProductDetailPage() {
             <span>/</span>
           </>
         )}
-        <span className="text-flipkart-text truncate max-w-xs">{product.name}</span>
+        <span className="fk-text truncate max-w-xs">{product.name}</span>
       </div>
 
       <div className="card p-4 md:p-6">
@@ -164,7 +185,7 @@ export default function ProductDetailPage() {
               )}
 
               {/* Main Image */}
-              <div className="flex-1 border border-flipkart-border/50 rounded-xl p-4 aspect-square flex items-center justify-center bg-white relative group">
+              <div className="flex-1 pdp-image-stage group">
                 <img
                   src={images[selectedImage]?.image_url || "https://via.placeholder.com/500"}
                   alt={product.name}
@@ -174,17 +195,17 @@ export default function ProductDetailPage() {
                 <div className="absolute top-3 right-3 flex flex-col gap-2">
                   <button
                     onClick={() => { if (!isSignedIn) { router.push("/sign-in"); return; } toggleWishlist(product.id); }}
-                    className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
+                    className="floating-icon-btn"
                     title={wishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
                   >
                     <FiHeart size={18} fill={wishlisted ? "#FF6161" : "none"} color={wishlisted ? "#FF6161" : "#878787"} />
                   </button>
                   <button
                     onClick={handleShare}
-                    className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
+                    className="floating-icon-btn"
                     title="Share"
                   >
-                    <FiShare2 size={16} className="text-flipkart-text-secondary" />
+                    <FiShare2 size={16} className="fk-text-secondary" />
                   </button>
                 </div>
               </div>
@@ -197,7 +218,7 @@ export default function ProductDetailPage() {
                   <button
                     key={img.id}
                     onClick={() => setSelectedImage(i)}
-                    className={`w-14 h-14 border-2 rounded-lg p-1 flex-shrink-0 transition ${i === selectedImage ? "border-flipkart-primary" : "border-gray-200 hover:border-gray-400"}`}
+                    className={`w-14 h-14 border-2 rounded-lg p-1 flex-shrink-0 transition ${i === selectedImage ? "border-flipkart-primary" : "fk-border hover:border-gray-400"}`}
                   >
                     <img src={img.image_url} alt="" className="w-full h-full object-contain" />
                   </button>
@@ -233,31 +254,31 @@ export default function ProductDetailPage() {
               {product.brand && (
                 <p className="text-sm text-flipkart-primary font-medium mb-1">{product.brand}</p>
               )}
-              <h1 className="text-xl font-medium text-flipkart-text leading-snug">{product.name}</h1>
+              <h1 className="text-xl font-medium fk-text leading-snug">{product.name}</h1>
               <div className="flex items-center gap-3 mt-2">
                 {parseFloat(product.avg_rating) > 0 && (
                   <span className={`rating-badge ${ratingClass}`}>
                     {parseFloat(product.avg_rating).toFixed(1)} <FiStar size={11} fill="white" />
                   </span>
                 )}
-                <span className="text-sm text-flipkart-text-secondary">
+                <span className="text-sm fk-text-secondary">
                   {product.total_ratings} Ratings & {product.total_reviews} Reviews
                 </span>
               </div>
             </div>
 
             {/* Price Block */}
-            <div className="border-b border-flipkart-border/30 pb-4">
+            <div className="border-b fk-border pb-4">
               {discountPercent > 0 && (
                 <div className="super-deal-badge mb-2">
                   <span className="arrow">↓</span>{discountPercent}% Off
                 </div>
               )}
               <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold">{formatPrice(parseFloat(product.price))}</span>
+                <span className="text-3xl font-bold fk-text">{formatPrice(parseFloat(product.price))}</span>
                 {parseFloat(product.mrp) > parseFloat(product.price) && (
                   <>
-                    <span className="text-lg text-flipkart-text-secondary line-through">{formatPrice(parseFloat(product.mrp))}</span>
+                    <span className="text-lg fk-text-secondary line-through">{formatPrice(parseFloat(product.mrp))}</span>
                     <span className="text-lg font-semibold text-flipkart-green">{getDiscountLabel(product.discount_percent)}</span>
                   </>
                 )}
@@ -283,39 +304,53 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Delivery & Services */}
-            <div className="flex flex-wrap gap-6 py-3 border-t border-b border-flipkart-border/30">
+            <div className="flex flex-wrap gap-6 py-3 border-t border-b fk-border">
               <div className="flex items-center gap-2 text-sm">
-                <FiTruck size={18} className="text-flipkart-text-secondary" />
+                <FiTruck size={18} className="fk-text-secondary" />
                 <div>
-                  <p className="font-medium">{getDeliveryDate()}</p>
-                  <p className="text-xs text-flipkart-text-secondary">
+                  <p className="font-medium fk-text">{getDeliveryDate()}</p>
+                  <p className="text-xs fk-text-secondary">
                     {parseFloat(product.price) >= 500 ? "Free Delivery" : "₹40 Delivery"}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <FiRefreshCcw size={18} className="text-flipkart-text-secondary" />
+                <FiRefreshCcw size={18} className="fk-text-secondary" />
                 <div>
-                  <p className="font-medium">7 Day Return</p>
-                  <p className="text-xs text-flipkart-text-secondary">Return policy</p>
+                  <p className="font-medium fk-text">7 Day Return</p>
+                  <p className="text-xs fk-text-secondary">Return policy</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <FiShield size={18} className="text-flipkart-text-secondary" />
+                <FiShield size={18} className="fk-text-secondary" />
                 <div>
-                  <p className="font-medium">1 Year Warranty</p>
-                  <p className="text-xs text-flipkart-text-secondary">Brand warranty</p>
+                  <p className="font-medium fk-text">1 Year Warranty</p>
+                  <p className="text-xs fk-text-secondary">Brand warranty</p>
                 </div>
               </div>
             </div>
 
+            {detailCards.length > 0 && (
+              <div className="pdp-detail-shell">
+                <h3 className="font-semibold mb-3 fk-text">Product Highlights</h3>
+                <div className="pdp-feature-grid">
+                  {detailCards.map((card) => (
+                    <div key={card.label} className="pdp-feature-card">
+                      <span className="pdp-feature-label">{card.label}</span>
+                      <p className="pdp-feature-value">{card.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Highlights */}
             {highlights.length > 0 && (
-              <div className="border-b border-flipkart-border/30 pb-4">
-                <h3 className="font-semibold mb-3">Highlights</h3>
+              <div className="border-b fk-border pb-4">
+                <h3 className="font-semibold mb-3 fk-text">Highlights</h3>
                 <ul className="space-y-2">
                   {highlights.map((h: string, i: number) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-flipkart-text">
+                    <li key={i} className="flex items-start gap-2 text-sm fk-text">
                       <FiCheck size={16} className="text-flipkart-green mt-0.5 flex-shrink-0" />
                       {h}
                     </li>
@@ -326,16 +361,16 @@ export default function ProductDetailPage() {
 
             {/* Description */}
             {product.description && (
-              <div className="border-b border-flipkart-border/30 pb-4">
-                <h3 className="font-semibold mb-2">Description</h3>
-                <p className="text-sm text-flipkart-text-secondary leading-relaxed">{product.description}</p>
+              <div className="border-b fk-border pb-4">
+                <h3 className="font-semibold mb-2 fk-text">Description</h3>
+                <p className="text-sm fk-text-secondary leading-relaxed">{product.description}</p>
               </div>
             )}
 
             {/* Specifications */}
             {Object.keys(specs).length > 0 && (
-              <div className="border-b border-flipkart-border/30 pb-4">
-                <h3 className="font-semibold mb-3">Specifications</h3>
+              <div className="border-b fk-border pb-4">
+                <h3 className="font-semibold mb-3 fk-text">Specifications</h3>
                 <div className="space-y-4">
                   {Object.entries(specs).map(([section, fields]: [string, any]) => (
                     <div key={section}>
@@ -343,9 +378,9 @@ export default function ProductDetailPage() {
                       <table className="w-full text-sm">
                         <tbody>
                           {Object.entries(fields).map(([key, value]: [string, any]) => (
-                            <tr key={key} className="border-b border-flipkart-border/20">
-                              <td className="py-2.5 pr-4 text-flipkart-text-secondary w-1/3">{key}</td>
-                              <td className="py-2.5 text-flipkart-text">{value}</td>
+                            <tr key={key} className="border-b fk-border">
+                              <td className="py-2.5 pr-4 fk-text-secondary w-1/3">{key}</td>
+                              <td className="py-2.5 fk-text">{value}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -370,17 +405,17 @@ export default function ProductDetailPage() {
                           <FiStar key={s} size={14} fill={s <= Math.round(parseFloat(product.avg_rating)) ? "#FF9F00" : "none"} color="#FF9F00" />
                         ))}
                       </div>
-                      <p className="text-xs text-flipkart-text-secondary mt-1">{product.total_ratings} ratings</p>
+                      <p className="text-xs fk-text-secondary mt-1">{product.total_ratings} ratings</p>
                     </div>
                     <div className="flex-1 space-y-1.5">
                       {reviews.ratingDistribution.map((d: any) => (
                         <div key={d.rating} className="flex items-center gap-2 text-sm">
                           <span className="w-3">{d.rating}</span>
-                          <FiStar size={12} className="text-flipkart-text-secondary" />
+                          <FiStar size={12} className="fk-text-secondary" />
                           <div className="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div className="h-full rounded-full bg-flipkart-green" style={{ width: `${d.percentage}%` }} />
                           </div>
-                          <span className="text-xs text-flipkart-text-secondary w-8">{d.count}</span>
+                          <span className="text-xs fk-text-secondary w-8">{d.count}</span>
                         </div>
                       ))}
                     </div>
@@ -391,22 +426,22 @@ export default function ProductDetailPage() {
                 {reviews.reviews?.length > 0 ? (
                   <div className="space-y-4">
                     {reviews.reviews.slice(0, 5).map((rev: any) => (
-                      <div key={rev.id} className="pb-4 border-b border-flipkart-border/30">
+                      <div key={rev.id} className="pb-4 border-b fk-border">
                         <div className="flex items-center gap-2 mb-2">
                           <span className={`rating-badge ${rev.rating >= 4 ? "high" : rev.rating >= 3 ? "medium" : "low"}`}>
                             {rev.rating} <FiStar size={10} fill="white" />
                           </span>
-                          {rev.title && <span className="font-medium text-sm">{rev.title}</span>}
+                          {rev.title && <span className="font-medium text-sm fk-text">{rev.title}</span>}
                         </div>
-                        {rev.body && <p className="text-sm text-flipkart-text-secondary mb-2">{rev.body}</p>}
-                        <p className="text-xs text-flipkart-text-secondary">
+                        {rev.body && <p className="text-sm fk-text-secondary mb-2">{rev.body}</p>}
+                        <p className="text-xs fk-text-secondary">
                           {rev.first_name || "Anonymous"} {rev.last_name || ""}
                         </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-flipkart-text-secondary">No reviews yet. Be the first to review!</p>
+                  <p className="text-sm fk-text-secondary">No reviews yet. Be the first to review!</p>
                 )}
               </div>
             )}

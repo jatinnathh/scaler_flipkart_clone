@@ -42,13 +42,13 @@ function BannerCarousel() {
       {/* Navigation buttons */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-1 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/95 rounded-full flex items-center justify-center shadow-md hover:bg-white transition z-10"
+        className="absolute left-1 top-1/2 -translate-y-1/2 carousel-nav-btn z-10"
       >
         <FiChevronLeft size={18} />
       </button>
       <button
         onClick={() => scroll("right")}
-        className="absolute right-1 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/95 rounded-full flex items-center justify-center shadow-md hover:bg-white transition z-10"
+        className="absolute right-1 top-1/2 -translate-y-1/2 carousel-nav-btn z-10"
       >
         <FiChevronRight size={18} />
       </button>
@@ -108,13 +108,13 @@ function ProductSection({ title, products, viewAllLink, bgColor }: {
         </div>
         <button
           onClick={() => scroll("left")}
-          className="absolute left-1 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/95 rounded-full flex items-center justify-center shadow-md hover:bg-white transition z-10"
+          className="absolute left-1 top-1/2 -translate-y-1/2 carousel-nav-btn z-10"
         >
           <FiChevronLeft size={18} />
         </button>
         <button
           onClick={() => scroll("right")}
-          className="absolute right-1 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/95 rounded-full flex items-center justify-center shadow-md hover:bg-white transition z-10"
+          className="absolute right-1 top-1/2 -translate-y-1/2 carousel-nav-btn z-10"
         >
           <FiChevronRight size={18} />
         </button>
@@ -132,7 +132,7 @@ function DealOfTheDay({ products }: { products: Product[] }) {
       <div className="section-header">
         <div>
           <h2>Deal of the Day</h2>
-          <p className="text-sm text-flipkart-text-secondary mt-0.5">Minimum 40% Off</p>
+          <p className="text-sm fk-text-secondary mt-0.5">Minimum 40% Off</p>
         </div>
         <Link href="/search?sortBy=discount" className="section-link no-underline">
           View All <FiArrowRight size={14} />

@@ -1,16 +1,36 @@
 import nodemailer from 'nodemailer';
 
-// For development, use Ethereal (fake SMTP) or configure Gmail/Resend
-// In production, set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS env vars
+// Nodemailer SMTP transporter — works on Vercel, Render, and any platform
+// Uses Gmail App Password (no email verification needed for recipients)
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false,
+  secure: false, // false for port 587 (uses STARTTLS)
   auth: {
-    user: process.env.SMTP_USER || '',
-    pass: process.env.SMTP_PASS || '',
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
+
+// ---------- Send helper ----------
+
+async function sendEmail(to: string, subject: string, html: string): Promise<void> {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('⚠️  SMTP_USER / SMTP_PASS not configured — skipping email.');
+    return;
+  }
+
+  await transporter.sendMail({
+    from: `"Flipkart Clone" <${process.env.SMTP_USER}>`,
+    to,
+    subject,
+    html,
+  });
+
+  console.log(`📧 Email sent to ${to}`);
+}
+
+// ---------- Order confirmation email ----------
 
 export async function sendOrderConfirmationEmail(to: string, order: {
   order_number: string;
@@ -108,22 +128,7 @@ export async function sendOrderConfirmationEmail(to: string, order: {
   const subject = `Order Confirmed — ${order.order_number} | Flipkart Clone`;
 
   try {
-    if (!process.env.SMTP_USER) {
-      console.log(`📧 Email would be sent to ${to} (SMTP not configured)`);
-      console.log(`   Order: ${order.order_number}, Total: ₹${order.total}`);
-      // Log as sent even if SMTP not configured (development mode)
-      await logEmailToDb(to, subject, 'sent');
-      return;
-    }
-
-    await transporter.sendMail({
-      from: `"Flipkart Clone" <${process.env.SMTP_USER}>`,
-      to,
-      subject,
-      html,
-    });
-
-    console.log(`📧 Order confirmation email sent to ${to}`);
+    await sendEmail(to, subject, html);
     await logEmailToDb(to, subject, 'sent');
   } catch (error: any) {
     console.error('Failed to send order confirmation email:', error);
@@ -132,7 +137,8 @@ export async function sendOrderConfirmationEmail(to: string, order: {
   }
 }
 
-// Log email to database
+// ---------- DB logging ----------
+
 async function logEmailToDb(recipient: string, subject: string, status: 'sent' | 'failed', errorMessage?: string) {
   try {
     const { query: dbQuery } = await import('./db.js');
@@ -145,4 +151,3 @@ async function logEmailToDb(recipient: string, subject: string, status: 'sent' |
     console.error('Failed to log email:', err);
   }
 }
-

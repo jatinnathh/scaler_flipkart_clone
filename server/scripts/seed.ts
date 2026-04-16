@@ -38,7 +38,167 @@ interface ProductSeed {
   images: { url: string; alt: string; is_primary: boolean }[];
 }
 
-const products: ProductSeed[] = [
+const CATEGORY_IMAGE_QUERIES: Record<string, string[][]> = {
+  laptops: [
+    ['laptop', 'computer', 'notebook'],
+    ['laptop', 'keyboard', 'screen'],
+    ['laptop', 'workspace', 'desk'],
+    ['notebook', 'computer', 'open'],
+    ['ultrabook', 'laptop', 'side'],
+  ],
+  headphones: [
+    ['headphones', 'audio', 'wireless'],
+    ['headphones', 'earcups', 'closeup'],
+    ['headphones', 'desk', 'music'],
+    ['headphones', 'lifestyle', 'audio'],
+    ['headphones', 'minimal', 'studio'],
+  ],
+  cameras: [
+    ['camera', 'dslr', 'lens'],
+    ['camera', 'photography', 'gear'],
+    ['camera', 'lens', 'closeup'],
+    ['camera', 'travel', 'photography'],
+    ['camera', 'professional', 'photo'],
+  ],
+  smartphones: [
+    ['smartphone', 'mobile', 'phone'],
+    ['smartphone', 'camera', 'back'],
+    ['mobile', 'display', 'phone'],
+    ['smartphone', 'inhand', 'device'],
+    ['smartphone', 'modern', 'technology'],
+  ],
+  'cases-covers': [
+    ['phone', 'case', 'cover'],
+    ['mobile', 'case', 'protection'],
+    ['phone', 'cover', 'silicone'],
+    ['smartphone', 'case', 'accessory'],
+    ['case', 'mobile', 'minimal'],
+  ],
+  'fashion-men': [
+    ['mens', 'fashion', 'style'],
+    ['mens', 'clothing', 'apparel'],
+    ['mens', 'outfit', 'casual'],
+    ['mens', 'wardrobe', 'lifestyle'],
+    ['mens', 'fashion', 'studio'],
+  ],
+  'fashion-women': [
+    ['women', 'fashion', 'style'],
+    ['women', 'clothing', 'apparel'],
+    ['women', 'ethnic', 'fashion'],
+    ['women', 'wardrobe', 'lifestyle'],
+    ['women', 'fashion', 'studio'],
+  ],
+  'home-kitchen': [
+    ['home', 'kitchen', 'product'],
+    ['home', 'interior', 'lifestyle'],
+    ['kitchen', 'household', 'utility'],
+    ['home', 'decor', 'detail'],
+    ['home', 'essentials', 'minimal'],
+  ],
+  books: [
+    ['book', 'cover', 'reading'],
+    ['book', 'pages', 'paperback'],
+    ['book', 'desk', 'reading'],
+    ['book', 'study', 'literature'],
+    ['book', 'library', 'reading'],
+  ],
+  sports: [
+    ['sports', 'fitness', 'gear'],
+    ['gym', 'training', 'equipment'],
+    ['sports', 'active', 'lifestyle'],
+    ['fitness', 'accessory', 'workout'],
+    ['sports', 'performance', 'training'],
+  ],
+  beauty: [
+    ['beauty', 'personalcare', 'product'],
+    ['grooming', 'care', 'bottle'],
+    ['beauty', 'closeup', 'product'],
+    ['personalcare', 'lifestyle', 'product'],
+    ['beauty', 'premium', 'packaging'],
+  ],
+  electronics: [
+    ['electronics', 'gadget', 'technology'],
+    ['tech', 'device', 'product'],
+    ['electronics', 'modern', 'device'],
+    ['gadget', 'closeup', 'technology'],
+    ['electronics', 'lifestyle', 'desk'],
+  ],
+};
+
+const PRODUCT_IMAGE_OVERRIDES: Record<string, string[][]> = {
+  'fogg-scent-xpressio-edp-men-100ml': [
+    ['mens', 'perfume', 'bottle'],
+    ['cologne', 'bottle', 'men'],
+    ['fragrance', 'bottle', 'luxury'],
+    ['perfume', 'packaging', 'glassbottle'],
+    ['mens', 'grooming', 'perfume'],
+  ],
+  'parachute-advansed-aloe-vera-hair-oil-250ml': [
+    ['hair', 'oil', 'bottle'],
+    ['haircare', 'oil', 'product'],
+    ['coconut', 'oil', 'beauty'],
+    ['hair', 'serum', 'bottle'],
+    ['haircare', 'wellness', 'product'],
+  ],
+  'himalaya-neem-face-wash-200ml': [
+    ['facewash', 'skincare', 'tube'],
+    ['skincare', 'cleanser', 'product'],
+    ['face', 'cleanser', 'bottle'],
+    ['beauty', 'facewash', 'product'],
+    ['skincare', 'bathroom', 'product'],
+  ],
+  'thinking-fast-and-slow-kahneman': [
+    ['book', 'paperback', 'reading'],
+    ['book', 'cover', 'desk'],
+    ['book', 'pages', 'study'],
+    ['book', 'reading', 'table'],
+    ['book', 'library', 'paperback'],
+  ],
+};
+
+function slugToKeywords(slug: string) {
+  return slug
+    .split('-')
+    .filter((part) => part.length > 2 && !/^\d+[a-z]*$/i.test(part))
+    .slice(0, 4);
+}
+
+function buildKeywordGroups(product: ProductSeed) {
+  const override = PRODUCT_IMAGE_OVERRIDES[product.slug];
+  if (override) return override;
+
+  const baseGroups =
+    CATEGORY_IMAGE_QUERIES[product.category_slug] ||
+    CATEGORY_IMAGE_QUERIES.electronics;
+  const productKeywords = slugToKeywords(product.slug);
+  const brandKeyword = product.brand?.toLowerCase().replace(/[^a-z0-9]+/g, '') || '';
+
+  return baseGroups.map((group, index) => {
+    const combined = [...group];
+    if (brandKeyword) combined.unshift(brandKeyword);
+    if (productKeywords[index]) combined.push(productKeywords[index]);
+    return Array.from(new Set(combined.filter(Boolean))).slice(0, 5);
+  });
+}
+
+function buildWebImageUrl(keywords: string[], lockSeed: number) {
+  const path = keywords
+    .flatMap((word) => word.toLowerCase().split(/[^a-z0-9]+/))
+    .filter(Boolean)
+    .join(',');
+
+  return `https://loremflickr.com/960/960/${path}?lock=${lockSeed}`;
+}
+
+function buildProductGallery(product: ProductSeed, productIndex: number) {
+  return buildKeywordGroups(product).map((keywords, imageIndex) => ({
+    url: buildWebImageUrl(keywords, productIndex * 10 + imageIndex + 1),
+    alt: `${product.name} image ${imageIndex + 1}`,
+    is_primary: imageIndex === 0,
+  }));
+}
+
+const baseProducts: ProductSeed[] = [
   // ========== ELECTRONICS - LAPTOPS ==========
   {
     name: 'Apple MacBook Air M2 (2023) 13.6-inch Laptop',
@@ -133,7 +293,7 @@ const products: ProductSeed[] = [
     slug: 'boat-rockerz-450',
     description: 'Immersive audio experience with 40mm drivers and up to 15 hours of playback.',
     short_description: '40mm drivers, 15hr battery, lightweight',
-    price: 999, mrp: 2990, category_slug: 'headphones', brand: 'boAt', stock_quantity: 100,
+    price: 1349, mrp: 2990, category_slug: 'headphones', brand: 'boAt', stock_quantity: 100,
     specifications: { Audio: { Driver: '40mm' }, Battery: { Life: '15 hours' } },
     highlights: ['40mm powerful drivers', '15 hours playback', 'Padded ear cushions', 'Lightweight design', 'Built-in mic'],
     images: [
@@ -1119,6 +1279,11 @@ const products: ProductSeed[] = [
     ]
   },
 ];
+
+const products: ProductSeed[] = baseProducts.map((product, index) => ({
+  ...product,
+  images: buildProductGallery(product, index),
+}));
 
 async function seed() {
   console.log('🌱 Starting database seeding...\n');
