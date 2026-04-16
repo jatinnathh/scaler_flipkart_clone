@@ -9,8 +9,8 @@ A e-commerce web application that replicates Flipkart's design, UI patterns, and
 
 | Service | URL |
 |---------|-----|
-| Frontend | [Vercel Deployment](https://flipkart-clone-jatinnathh.vercel.app) |
-| Backend API | [Render Deployment](https://flipkart-clone-server-rxmj.onrender.com/api/health) |
+| Frontend | [Vercel Deployment](https://jatinscaler.vercel.app) |
+
 
 ---
 
