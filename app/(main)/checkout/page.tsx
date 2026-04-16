@@ -108,9 +108,8 @@ export default function CheckoutPage() {
             }
           },
           prefill: {
-            name: "Test Customer",
-            email: "test@example.com",
-            contact: "9999999999",
+            name: addresses.find(a => a.id === selectedAddress)?.full_name || "",
+            contact: addresses.find(a => a.id === selectedAddress)?.phone || "",
           },
           theme: { color: "#2874F0" },
           modal: {
