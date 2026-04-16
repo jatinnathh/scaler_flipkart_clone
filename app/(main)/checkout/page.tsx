@@ -266,7 +266,7 @@ export default function CheckoutPage() {
                   <input type="radio" name="payment" checked={paymentMethod === "razorpay"} onChange={() => setPaymentMethod("razorpay")} className="accent-flipkart-primary" />
                   <FiCreditCard size={20} />
                   <div>
-                    <span className="font-semibold">Razorpay (UPI/Card/Net Banking)</span>
+                    <span className="font-semibold">Razorpay (choose netbanking, then select any bank , then click success, this is required as this is test mode) </span>
                     <p className="text-xs text-flipkart-text-secondary">Pay securely using Razorpay</p>
                   </div>
                 </label>
