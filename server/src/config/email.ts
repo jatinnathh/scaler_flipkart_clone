@@ -127,7 +127,7 @@ export async function sendOrderConfirmationEmail(to: string, order: {
         <!-- Footer -->
         <div style="background: #f5f5f5; padding: 20px 32px; text-align: center; font-size: 12px; color: #878787;">
           <p style="margin: 0;">This is an automated email from Flipkart Clone.</p>
-          <p style="margin: 4px 0 0;">Built as a Scaler Academy Assignment</p>
+          
         </div>
       </div>
     </body>

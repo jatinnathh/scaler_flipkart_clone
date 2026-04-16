@@ -1,8 +1,7 @@
 # Flipkart Clone — Full-Stack E-Commerce Platform
 
-**SDE Intern Fullstack Assignment — Scaler Academy**
 
-A production-ready e-commerce web application that replicates Flipkart's design, UI patterns, and user experience. Built with Next.js 16, Express.js, and PostgreSQL.
+A e-commerce web application that replicates Flipkart's design, UI patterns, and user experience. Built with Next.js 16, Express.js, and PostgreSQL.
 
 ---
 
@@ -193,4 +192,3 @@ flipkart_clone/
 
 ---
 
-**Author:** Jatin Nath | Scaler Academy
