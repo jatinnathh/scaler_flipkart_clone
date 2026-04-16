@@ -1,16 +1,23 @@
 import nodemailer from 'nodemailer';
 
-// Nodemailer SMTP transporter — works on Vercel, Render, and any platform
-// Uses Gmail App Password (no email verification needed for recipients)
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, // false for port 587 (uses STARTTLS)
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// Create transporter lazily so env vars are guaranteed to be loaded
+function getTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: 465,            // Direct SSL — avoids STARTTLS socket close on Render/Vercel
+    secure: true,         // true for port 465
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    connectionTimeout: 10000,  // 10s to establish connection
+    greetingTimeout: 10000,    // 10s for server greeting
+    socketTimeout: 15000,      // 15s for socket inactivity
+    tls: {
+      rejectUnauthorized: false,  // accept self-signed certs on cloud
+    },
+  });
+}
 
 // ---------- Send helper ----------
 
@@ -19,6 +26,8 @@ async function sendEmail(to: string, subject: string, html: string): Promise<voi
     console.warn('⚠️  SMTP_USER / SMTP_PASS not configured — skipping email.');
     return;
   }
+
+  const transporter = getTransporter();
 
   await transporter.sendMail({
     from: `"Flipkart Clone" <${process.env.SMTP_USER}>`,
